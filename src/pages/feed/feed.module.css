@@ -1,0 +1,19 @@
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 40px 16px;
+}
+
+.card {
+  box-sizing: border-box;
+  width: min(720px, 100%);
+  padding: 40px;
+  text-align: center;
+}
+
+.text {
+  color: rgb(255 255 255 / 80%);
+  line-height: 1.7;
+}

@@ -1,31 +1,24 @@
-import { Preloader } from '@krgaa/react-developer-burger-ui-components';
-import { useEffect, useState } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { AppHeader } from '@components/app-header/app-header';
-import { BurgerConstructor } from '@components/burger-constructor/burger-constructor';
-import BurgerIngredients from '@components/burger-ingredients/burger-ingredients';
-import { IngredientDetails } from '@components/modal/ingredient-details';
-import { Modal } from '@components/modal/modal';
-import { OrderDetails } from '@components/modal/order-details';
+import { ProtectedRoute, GuestRoute } from '@components/protected-route/protected-route';
 
-import {
-  addBun,
-  addIngredient,
-  removeIngredient,
-  moveIngredient,
-  clearConstructor,
-} from '../../features/burgerConstructor/burgerConstructorSlice';
-import { fetchIngredients } from '../../features/ingredients/ingredientsSlice';
-import { createOrder } from '../../features/order/orderSlice';
-import {
-  selectIngredient,
-  clearSelectedIngredient,
-} from '../../features/selectedIngredient/selectedIngredientSlice';
+import { initializeAuth } from '../../features/auth/authSlice';
+import { FeedPage } from '../../pages/feed/feed';
+import { ForgotPasswordPage } from '../../pages/forgot-password/forgot-password';
+import { Home } from '../../pages/home/home';
+import { IngredientPage } from '../../pages/ingredient/ingredient';
+import { LoginPage } from '../../pages/login/login';
+import { NotFoundPage } from '../../pages/not-found/not-found';
+import { ProfilePage } from '../../pages/profile/profile';
+import { ProfileInfoPage } from '../../pages/profile/profile-info';
+import { ProfileOrderPage } from '../../pages/profile/profile-order';
+import { RegisterPage } from '../../pages/register/register';
+import { ResetPasswordPage } from '../../pages/reset-password/reset-password';
 
-import type { RootState, AppDispatch } from '../../store';
+import type { AppDispatch } from '../../store';
 import type React from 'react';
 
 import styles from './app.module.css';
@@ -33,141 +26,65 @@ import styles from './app.module.css';
 export const App = (): React.JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const ingredients = useSelector((s: RootState) => s.ingredients.items);
-  const status = useSelector((s: RootState) => s.ingredients.status);
-  const error = useSelector((s: RootState) => s.ingredients.error);
-  const selectedIngredient = useSelector((s: RootState) => s.selectedIngredient);
-  const burgerConstructor = useSelector((s: RootState) => s.burgerConstructor);
-  const orderNumber = useSelector((s: RootState) => s.order.number);
-
-  const [isOrderModalOpen, setOrderModalOpen] = useState(false);
-
-  useEffect(() => void dispatch(fetchIngredients()), [dispatch]);
-
-  const handleAddIngredient = (ingredientId: string): void => {
-    const ingredient = ingredients.find((item) => item._id === ingredientId);
-    if (!ingredient) return;
-
-    if (ingredient.type === 'bun') {
-      dispatch(addBun(ingredient));
-      return;
-    }
-
-    dispatch(addIngredient(ingredient));
-  };
-
-  const handleAddIngredientAndClose = (ingredientId: string): void => {
-    handleAddIngredient(ingredientId);
-    dispatch(clearSelectedIngredient());
-  };
-
-  const handleSelectIngredient = (ingredientId: string): void => {
-    const ingredient = ingredients.find((item) => item._id === ingredientId);
-    if (!ingredient) return;
-    dispatch(selectIngredient(ingredient));
-  };
-
-  const handleCloseIngredientModal = (): void => {
-    dispatch(clearSelectedIngredient());
-  };
-
-  const canOrder =
-    burgerConstructor.bun !== null && burgerConstructor.ingredients.length > 0;
-
-  const handleOpenOrderModal = async (): Promise<void> => {
-    if (!canOrder || !burgerConstructor.bun) return;
-
-    const payload = [
-      burgerConstructor.bun._id,
-      ...burgerConstructor.ingredients.map((ing) => ing._id),
-      burgerConstructor.bun._id,
-    ];
-
-    try {
-      await dispatch(createOrder(payload)).unwrap();
-      dispatch(clearConstructor());
-      setOrderModalOpen(true);
-    } catch (err) {
-      alert(err ?? 'Ошибка при создании заказа');
-    }
-  };
-
-  const handleCloseOrderModal = (): void => setOrderModalOpen(false);
-
-  const handleRemoveIngredient = (uniqueId: string): void => {
-    dispatch(removeIngredient(uniqueId));
-  };
-
-  const getIngredientCount = (ingredientId: string): number => {
-    const ingredient = ingredients.find((item) => item._id === ingredientId);
-    if (!ingredient) return 0;
-    if (ingredient.type === 'bun') {
-      return burgerConstructor.bun?._id === ingredientId ? 1 : 0;
-    }
-    return burgerConstructor.ingredients.filter((item) => item._id === ingredientId)
-      .length;
-  };
-
-  const handleMoveIngredient = (from: number, to: number): void => {
-    dispatch(moveIngredient({ from, to }));
-  };
-
-  if (status === 'loading') return <Preloader />;
-
-  if (error) {
-    console.log(error);
-    return (
-      <div className={styles.app}>
-        <AppHeader />
-        <div className={styles.error_block}>
-          <p className="text text_type_main-default">Ошибка загрузки ингредиентов:</p>
-          <p className="text text_type_main-default">{error}</p>
-        </div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    void dispatch(initializeAuth());
+  }, [dispatch]);
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <BrowserRouter>
       <div className={styles.app}>
         <AppHeader />
-        <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>
-          Соберите бургер
-        </h1>
-
-        <main className={`${styles.main} pl-5 pr-5`}>
-          <BurgerIngredients
-            ingredients={ingredients}
-            onSelectIngredient={handleSelectIngredient}
-            getIngredientCount={getIngredientCount}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/ingredients/:id" element={<IngredientPage />} />
+          <Route
+            path="/register"
+            element={
+              <GuestRoute>
+                <RegisterPage />
+              </GuestRoute>
+            }
           />
-          <BurgerConstructor
-            ingredients={burgerConstructor.ingredients}
-            selectedBun={burgerConstructor.bun}
-            onRemoveIngredient={handleRemoveIngredient}
-            moveIngredient={handleMoveIngredient}
-            onOpenOrder={handleOpenOrderModal}
-            canOrder={canOrder}
-            onAddIngredient={handleAddIngredient}
+          <Route
+            path="/login"
+            element={
+              <GuestRoute>
+                <LoginPage />
+              </GuestRoute>
+            }
           />
-        </main>
-
-        {selectedIngredient && (
-          <Modal title="Детали ингредиента" onClose={handleCloseIngredientModal}>
-            <IngredientDetails
-              ingredient={selectedIngredient}
-              onAdd={handleAddIngredientAndClose}
-            />
-          </Modal>
-        )}
-
-        {isOrderModalOpen && (
-          <Modal title={`#${orderNumber ?? ''}`} onClose={handleCloseOrderModal}>
-            <OrderDetails orderNumber={orderNumber ?? ''} />
-          </Modal>
-        )}
+          <Route
+            path="/forgot-password"
+            element={
+              <GuestRoute>
+                <ForgotPasswordPage />
+              </GuestRoute>
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <GuestRoute>
+                <ResetPasswordPage />
+              </GuestRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<ProfileInfoPage />} />
+            <Route path="orders" element={<ProfileOrderPage />} />
+          </Route>
+          <Route path="/feed" element={<FeedPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
       </div>
-    </DndProvider>
+    </BrowserRouter>
   );
 };
 

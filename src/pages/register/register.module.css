@@ -1,0 +1,81 @@
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 40px 16px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(520px, 100%);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  margin-bottom: 7vh;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.toggleEye {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  background: rgb(255 255 255 / 3%);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background 0.12s ease;
+}
+
+.toggleEye:hover {
+  background: rgb(255 255 255 / 6%);
+}
+
+.button {
+  width: 220px;
+  min-height: 48px;
+  color: #fff;
+  font-weight: 700;
+  background: linear-gradient(90deg, #7b5bff, #b936ff);
+  border: none;
+  border-radius: 32px;
+  box-shadow:
+    0 10px 30px rgb(123 91 255 / 28%),
+    0 0 60px rgb(185 54 255 / 18%);
+  cursor: pointer;
+  filter: drop-shadow(0 8px 40px rgb(123 91 255 / 18%));
+}
+
+.hint {
+  margin-top: 24px;
+  color: rgb(255 255 255 / 70%);
+  text-align: center;
+}
+
+.error {
+  margin-top: 8px;
+  color: #ff6b6b;
+}

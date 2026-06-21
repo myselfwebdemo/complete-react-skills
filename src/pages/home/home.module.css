@@ -1,0 +1,32 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: var(--text-primary-color);
+}
+
+.title {
+  width: 100%;
+  max-width: 1260px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.main {
+  display: flex;
+  gap: 5vw;
+  width: 1240px;
+  height: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.error_block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 1260px;
+  margin: 0 auto;
+  padding: 32px;
+}
