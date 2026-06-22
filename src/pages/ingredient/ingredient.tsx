@@ -1,3 +1,5 @@
+import { Preloader } from '@krgaa/react-developer-burger-ui-components';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -8,6 +10,7 @@ import {
   addBun,
   addIngredient,
 } from '../../features/burgerConstructor/burgerConstructorSlice';
+import { fetchIngredients } from '../../features/ingredients/ingredientsSlice';
 
 import type { RootState, AppDispatch } from '../../store';
 import type React from 'react';
@@ -21,10 +24,13 @@ export const IngredientPage = (): React.JSX.Element => {
   const ingredients = useSelector((s: RootState) => s.ingredients.items);
 
   const ingredient = ingredients.find((item) => item._id === id);
+  const status = useSelector((s: RootState) => s.ingredients.status);
 
-  const handleClose = (): void => {
-    void navigate('/');
-  };
+  useEffect(() => {
+    if (status === 'idle') {
+      void dispatch(fetchIngredients());
+    }
+  }, [dispatch, status]);
 
   const handleAddIngredient = (): void => {
     if (!ingredient) return;
@@ -38,6 +44,10 @@ export const IngredientPage = (): React.JSX.Element => {
     void navigate('/');
   };
 
+  if (status === 'loading') {
+    return <Preloader />;
+  }
+
   if (!ingredient) {
     return (
       <div className={styles.ingredient_page}>
@@ -48,9 +58,47 @@ export const IngredientPage = (): React.JSX.Element => {
 
   return (
     <div className={styles.ingredient_page}>
-      <Modal title="Детали ингредиента" onClose={handleClose}>
-        <IngredientDetails ingredient={ingredient} onAdd={handleAddIngredient} />
-      </Modal>
+      <IngredientDetails ingredient={ingredient} onAdd={handleAddIngredient} />
     </div>
+  );
+};
+
+export const IngredientModal = (): React.ReactElement | null => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const ingredients = useSelector((s: RootState) => s.ingredients.items);
+  const status = useSelector((s: RootState) => s.ingredients.status);
+
+  const ingredient = ingredients.find((item) => item._id === id);
+
+  const handleClose = (): void => {
+    void navigate(-1);
+  };
+
+  const handleAddIngredient = (): void => {
+    if (!ingredient) return;
+
+    if (ingredient.type === 'bun') {
+      void dispatch(addBun(ingredient));
+    } else {
+      void dispatch(addIngredient(ingredient));
+    }
+
+    void navigate(-1);
+  };
+
+  if (status === 'loading') {
+    return <Preloader />;
+  }
+
+  if (!ingredient) {
+    return null;
+  }
+
+  return (
+    <Modal title="Детали ингредиента" onClose={handleClose}>
+      <IngredientDetails ingredient={ingredient} onAdd={handleAddIngredient} />
+    </Modal>
   );
 };

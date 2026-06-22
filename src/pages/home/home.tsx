@@ -3,11 +3,10 @@ import { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { BurgerConstructor } from '@components/burger-constructor/burger-constructor';
 import BurgerIngredients from '@components/burger-ingredients/burger-ingredients';
-import { IngredientDetails } from '@components/modal/ingredient-details';
 import { Modal } from '@components/modal/modal';
 import { OrderDetails } from '@components/modal/order-details';
 
@@ -20,7 +19,6 @@ import {
 } from '../../features/burgerConstructor/burgerConstructorSlice';
 import { fetchIngredients } from '../../features/ingredients/ingredientsSlice';
 import { createOrder } from '../../features/order/orderSlice';
-import { clearSelectedIngredient } from '../../features/selectedIngredient/selectedIngredientSlice';
 
 import type { RootState, AppDispatch } from '../../store';
 import type React from 'react';
@@ -30,20 +28,15 @@ import styles from './home.module.css';
 export const Home = (): React.JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { id: ingredientIdFromUrl } = useParams<{ id?: string }>();
+  const location = useLocation();
 
   const ingredients = useSelector((s: RootState) => s.ingredients.items);
   const status = useSelector((s: RootState) => s.ingredients.status);
   const error = useSelector((s: RootState) => s.ingredients.error);
-  const selectedIngredient = useSelector((s: RootState) => s.selectedIngredient);
   const burgerConstructor = useSelector((s: RootState) => s.burgerConstructor);
   const orderNumber = useSelector((s: RootState) => s.order.number);
 
   const [isOrderModalOpen, setOrderModalOpen] = useState(false);
-
-  const ingredientToShow = ingredientIdFromUrl
-    ? ingredients.find((item) => item._id === ingredientIdFromUrl)
-    : selectedIngredient;
 
   useEffect(() => void dispatch(fetchIngredients()), [dispatch]);
 
@@ -59,18 +52,10 @@ export const Home = (): React.JSX.Element => {
     void dispatch(addIngredient(ingredient));
   };
 
-  const handleAddIngredientAndClose = (ingredientId: string): void => {
-    handleAddIngredient(ingredientId);
-    void dispatch(clearSelectedIngredient());
-    void navigate('/');
-  };
-
   const handleSelectIngredient = (ingredientId: string): void => {
-    void navigate(`/ingredients/${ingredientId}`);
-  };
-
-  const handleCloseIngredientModal = (): void => {
-    void navigate('/');
+    void navigate(`/ingredients/${ingredientId}`, {
+      state: { backgroundLocation: location },
+    });
   };
 
   const canOrder =
@@ -149,15 +134,6 @@ export const Home = (): React.JSX.Element => {
             onAddIngredient={handleAddIngredient}
           />
         </main>
-
-        {ingredientToShow && (
-          <Modal title="Детали ингредиента" onClose={handleCloseIngredientModal}>
-            <IngredientDetails
-              ingredient={ingredientToShow}
-              onAdd={handleAddIngredientAndClose}
-            />
-          </Modal>
-        )}
 
         {isOrderModalOpen && (
           <Modal title={`#${orderNumber ?? ''}`} onClose={handleCloseOrderModal}>
