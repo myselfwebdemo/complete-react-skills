@@ -1,9 +1,12 @@
+import {
+  Button,
+  EmailInput,
+  Input,
+  PasswordInput,
+} from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
 
 import { registerUser } from '../../features/auth/authSlice';
 
@@ -20,7 +23,6 @@ export const RegisterPage = (): React.JSX.Element => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
 
   const from =
     (location.state as { from?: { pathname: string } } | null)?.from?.pathname ?? '/';
@@ -36,9 +38,7 @@ export const RegisterPage = (): React.JSX.Element => {
     e.preventDefault();
     const result = await dispatch(registerUser({ name, email, password }));
     if (registerUser.fulfilled.match(result)) {
-      if (from) {
-        void navigate(from, { replace: true });
-      }
+      void navigate(from || '/', { replace: true });
     }
   };
 
@@ -47,79 +47,21 @@ export const RegisterPage = (): React.JSX.Element => {
       <section className={styles.card}>
         <h1 className="text text_type_main-large mb-6">Регистрация</h1>
         <form className={styles.form} onSubmit={(e) => void handleSubmit(e)}>
-          <Input
-            type="text"
-            placeholder="Имя"
-            value={name}
-            onChange={handleNameChange}
-          />
-          <Input
-            type="email"
-            placeholder="E-mail"
-            value={email}
-            onChange={handleEmailChange}
-          />
-          <Input
-            type={showPassword ? 'text' : 'password'}
+          <Input placeholder="Имя" value={name} onChange={handleNameChange} />
+          <EmailInput placeholder="E-mail" value={email} onChange={handleEmailChange} />
+          <PasswordInput
             placeholder="Пароль"
             value={password}
             onChange={handlePasswordChange}
-            suffix={
-              <button
-                type="button"
-                aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
-                className={styles.toggleEye}
-                onClick={() => setShowPassword((s) => !s)}
-              >
-                {showPassword ? (
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M3 3L21 21"
-                      stroke="#fff"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M10.58 10.58a3 3 0 0 0 4.24 4.24"
-                      stroke="#fff"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"
-                      stroke="#fff"
-                      strokeWidth="1.2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <circle cx="12" cy="12" r="3" stroke="#fff" strokeWidth="1.2" />
-                  </svg>
-                )}
-              </button>
-            }
           />
-          <Button type="submit">Зарегистрироваться</Button>
+          <Button htmlType="submit">Зарегистрироваться</Button>
         </form>
         {authError && <p className={styles.error}>{authError}</p>}
         <p className={styles.hint}>
-          Уже зарегистрированы? <Link to="/login">Войти</Link>
+          Уже зарегистрированы?{' '}
+          <Link className={styles.link} to="/login">
+            Войти
+          </Link>
         </p>
       </section>
     </main>

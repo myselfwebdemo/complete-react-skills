@@ -28,6 +28,15 @@
   text-align: center;
 }
 
+.link {
+  color: #4c4cff;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
 .error {
   margin-top: 8px;
   color: #ff6b6b;

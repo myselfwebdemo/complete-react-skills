@@ -1,5 +1,5 @@
 import { Preloader } from '@krgaa/react-developer-burger-ui-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +17,6 @@ import {
   moveIngredient,
   clearConstructor,
 } from '../../features/burgerConstructor/burgerConstructorSlice';
-import { fetchIngredients } from '../../features/ingredients/ingredientsSlice';
 import { createOrder } from '../../features/order/orderSlice';
 
 import type { RootState, AppDispatch } from '../../store';
@@ -35,10 +34,9 @@ export const Home = (): React.JSX.Element => {
   const error = useSelector((s: RootState) => s.ingredients.error);
   const burgerConstructor = useSelector((s: RootState) => s.burgerConstructor);
   const orderNumber = useSelector((s: RootState) => s.order.number);
+  const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
 
   const [isOrderModalOpen, setOrderModalOpen] = useState(false);
-
-  useEffect(() => void dispatch(fetchIngredients()), [dispatch]);
 
   const handleAddIngredient = (ingredientId: string): void => {
     const ingredient = ingredients.find((item) => item._id === ingredientId);
@@ -63,6 +61,11 @@ export const Home = (): React.JSX.Element => {
 
   const handleOpenOrderModal = async (): Promise<void> => {
     if (!canOrder || !burgerConstructor.bun) return;
+
+    if (!isAuthenticated) {
+      void navigate('/login', { state: { from: location } });
+      return;
+    }
 
     const payload = [
       burgerConstructor.bun._id,

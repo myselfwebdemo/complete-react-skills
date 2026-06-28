@@ -1,9 +1,11 @@
+import {
+  Button,
+  Input,
+  PasswordInput,
+} from '@krgaa/react-developer-burger-ui-components';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
 
 import { resetPassword } from '../../features/auth/authSlice';
 
@@ -45,23 +47,24 @@ export const ResetPasswordPage = (): React.JSX.Element => {
       <section className={styles.card}>
         <h1 className="text text_type_main-large mb-6">Сброс пароля</h1>
         <form className={styles.form} onSubmit={(e) => void handleSubmit(e)}>
-          <Input
-            type="password"
+          <PasswordInput
             placeholder="Введите новый пароль"
             value={password}
             onChange={handlePasswordChange}
           />
           <Input
-            type="text"
             placeholder="Введите код из письма"
             value={code}
             onChange={handleCodeChange}
           />
-          <Button type="submit">Сохранить</Button>
+          <Button htmlType="submit">Сохранить</Button>
         </form>
         {authError && <p className={styles.error}>{authError}</p>}
         <p className={styles.hint}>
-          Вспомнили пароль? <Link to="/login">Войти</Link>
+          Вспомнили пароль?{' '}
+          <Link className={styles.link} to="/login">
+            Войти
+          </Link>
         </p>
       </section>
     </main>

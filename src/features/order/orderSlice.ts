@@ -1,6 +1,7 @@
 import checkResponse from '@/utils/check-response';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+import { getAccessToken } from '@utils/auth';
 import { API_BASE_URL } from '@utils/constants';
 
 type OrderResponse = {
@@ -25,9 +26,17 @@ export const createOrder = createAsyncThunk<string, string[], { rejectValue: str
   'order/create',
   async (ingredients, { rejectWithValue }) => {
     try {
+      const accessToken = getAccessToken();
+      if (!accessToken) {
+        return rejectWithValue('Необходимо авторизоваться');
+      }
+
       const res = await fetch(`${API_BASE_URL}/orders`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: accessToken,
+        },
         body: JSON.stringify({ ingredients }),
       }).then(checkResponse<OrderResponse>);
 

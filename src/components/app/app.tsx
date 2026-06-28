@@ -6,6 +6,7 @@ import { AppHeader } from '@components/app-header/app-header';
 import { ProtectedRoute, GuestRoute } from '@components/protected-route/protected-route';
 
 import { initializeAuth } from '../../features/auth/authSlice';
+import { fetchIngredients } from '../../features/ingredients/ingredientsSlice';
 import { FeedPage } from '../../pages/feed/feed';
 import { ForgotPasswordPage } from '../../pages/forgot-password/forgot-password';
 import { Home } from '../../pages/home/home';
@@ -32,6 +33,7 @@ export const App = (): React.JSX.Element => {
 
   useEffect(() => {
     void dispatch(initializeAuth());
+    void dispatch(fetchIngredients());
   }, [dispatch]);
 
   return (

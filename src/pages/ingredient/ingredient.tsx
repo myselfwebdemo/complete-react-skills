@@ -1,5 +1,4 @@
 import { Preloader } from '@krgaa/react-developer-burger-ui-components';
-import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -10,7 +9,6 @@ import {
   addBun,
   addIngredient,
 } from '../../features/burgerConstructor/burgerConstructorSlice';
-import { fetchIngredients } from '../../features/ingredients/ingredientsSlice';
 
 import type { RootState, AppDispatch } from '../../store';
 import type React from 'react';
@@ -25,12 +23,6 @@ export const IngredientPage = (): React.JSX.Element => {
 
   const ingredient = ingredients.find((item) => item._id === id);
   const status = useSelector((s: RootState) => s.ingredients.status);
-
-  useEffect(() => {
-    if (status === 'idle') {
-      void dispatch(fetchIngredients());
-    }
-  }, [dispatch, status]);
 
   const handleAddIngredient = (): void => {
     if (!ingredient) return;

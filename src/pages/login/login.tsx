@@ -1,9 +1,11 @@
+import {
+  Button,
+  EmailInput,
+  PasswordInput,
+} from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
 
 import { loginUser } from '../../features/auth/authSlice';
 
@@ -41,26 +43,26 @@ export const LoginPage = (): React.JSX.Element => {
       <section className={styles.card}>
         <h1 className="text text_type_main-large mb-6">Войти</h1>
         <form className={styles.form} onSubmit={(e) => void handleSubmit(e)}>
-          <Input
-            type="email"
-            placeholder="E-mail"
-            value={email}
-            onChange={handleEmailChange}
-          />
-          <Input
-            type="password"
+          <EmailInput placeholder="E-mail" value={email} onChange={handleEmailChange} />
+          <PasswordInput
             placeholder="Пароль"
             value={password}
             onChange={handlePasswordChange}
           />
-          <Button type="submit">Войти</Button>
+          <Button htmlType="submit">Войти</Button>
         </form>
         {authError && <p className={styles.error}>{authError}</p>}
         <p className={styles.hint}>
-          Впервые здесь? <Link to="/register">Зарегистрироваться</Link>
+          Впервые здесь?{' '}
+          <Link className={styles.link} to="/register">
+            Зарегистрироваться
+          </Link>
         </p>
         <p className={styles.hint}>
-          Забыли пароль? <Link to="/forgot-password">Восстановить пароль</Link>
+          Забыли пароль?{' '}
+          <Link className={styles.link} to="/forgot-password">
+            Восстановить пароль
+          </Link>
         </p>
       </section>
     </main>

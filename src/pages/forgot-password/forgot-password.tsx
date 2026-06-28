@@ -1,9 +1,7 @@
+import { Button, EmailInput } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
 
 import { requestPasswordReset } from '../../features/auth/authSlice';
 
@@ -35,17 +33,19 @@ export const ForgotPasswordPage = (): React.JSX.Element => {
       <section className={styles.card}>
         <h1 className="text text_type_main-large mb-6">Восстановление пароля</h1>
         <form className={styles.form} onSubmit={(e) => void handleSubmit(e)}>
-          <Input
-            type="email"
+          <EmailInput
             placeholder="Укажите e-mail"
             value={email}
             onChange={handleEmailChange}
           />
-          <Button type="submit">Восстановить</Button>
+          <Button htmlType="submit">Восстановить</Button>
         </form>
         {authError && <p className={styles.error}>{authError}</p>}
         <p className={styles.hint}>
-          Вспомнили пароль? <Link to="/login">Войти</Link>
+          Вспомнили пароль?{' '}
+          <Link className={styles.link} to="/login">
+            Войти
+          </Link>
         </p>
       </section>
     </main>

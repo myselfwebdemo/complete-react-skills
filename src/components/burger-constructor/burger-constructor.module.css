@@ -35,16 +35,6 @@
   opacity: 0.9;
 }
 
-.item_inner {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-  padding: 16px 18px;
-  background: var(--background);
-  border-radius: 30px;
-}
-
 .drag_icon {
   display: flex;
   flex-shrink: 0;
@@ -122,7 +112,7 @@
   justify-content: center;
   align-items: center;
   min-height: 64px;
-  padding: 16px 18px;
+  padding: 8px;
   color: var(--text-inactive-color);
   font-size: 16px;
   text-align: center;
