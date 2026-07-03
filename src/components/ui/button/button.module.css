@@ -1,0 +1,33 @@
+.button {
+  width: 60%;
+  min-height: 48px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  background: linear-gradient(to right, #4f4dff, #b936ff);
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.button:hover {
+  box-shadow:
+    0 0 16px 8px #3333ff40,
+    0 0 8px 8px #3333ff40;
+}
+
+.disabled {
+  color: rgb(255 255 255 / 60%);
+  background: linear-gradient(90deg, #6f6f7f, #6f6f7f);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.6;
+  filter: none;
+}
+
+.button:disabled {
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.6;
+}

@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import authReducer from '../features/auth/authSlice';
 import burgerConstructorReducer from '../features/burgerConstructor/burgerConstructorSlice';
 import ingredientsReducer from '../features/ingredients/ingredientsSlice';
 import orderReducer from '../features/order/orderSlice';
@@ -11,6 +12,7 @@ export const store = configureStore({
     selectedIngredient: selectedIngredientReducer,
     order: orderReducer,
     burgerConstructor: burgerConstructorReducer,
+    auth: authReducer,
   },
 });
 
