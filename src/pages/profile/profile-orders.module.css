@@ -1,0 +1,132 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.header h1 {
+  font-size: 28px;
+}
+
+.description {
+  color: #8585ad;
+  line-height: 1.5;
+}
+
+.orders_list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 70vh;
+  padding-right: 8px;
+  overflow-y: auto;
+}
+
+.orders_list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.orders_list::-webkit-scrollbar-thumb {
+  background: #8585ad;
+  border-radius: 8px;
+}
+
+.order_card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 220px;
+  padding: 24px;
+  color: white;
+  text-align: left;
+  background: #1c1c21;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+}
+
+.order_card:hover {
+  background: #222229;
+}
+
+.order_status {
+  color: #0cc;
+}
+
+.order_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.order_header span:first-child {
+  color: white;
+}
+
+.order_card h2 {
+  margin: 0 0 8px;
+  color: white;
+  font-size: 24px;
+}
+
+.order_footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.order_footer span:last-child {
+  color: white;
+  font-size: 24px;
+}
+
+.order_body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.ingredients_preview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.ingredient_circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 54px;
+  height: 54px;
+  margin-right: -24px;
+  overflow: hidden;
+  background: rgb(17 17 17 / 90%);
+  border: 1px solid var(--colors-interface-accent);
+  border-radius: 50%;
+}
+
+.ingredient_circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.price_wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}

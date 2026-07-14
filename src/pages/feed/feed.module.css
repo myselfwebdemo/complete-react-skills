@@ -1,19 +1,116 @@
 .page {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  padding: 40px 16px;
-}
-
-.card {
+  flex-direction: column;
   box-sizing: border-box;
-  width: min(720px, 100%);
-  padding: 40px;
-  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding: 40px 16px 0;
+  overflow: hidden;
 }
 
-.text {
-  color: rgb(255 255 255 / 80%);
-  line-height: 1.7;
+.page h1 {
+  width: 59%;
+  margin: auto;
+  margin-bottom: 24px;
+}
+
+.content {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(350px, 1fr) minmax(350px, 1fr);
+  gap: 32px;
+  width: 100%;
+  max-width: 1000px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.title {
+  grid-column: 1 / -1;
+}
+
+.left {
+  padding-right: 12px;
+  overflow-y: auto;
+  color: white;
+}
+
+.left::-webkit-scrollbar {
+  width: 4px;
+}
+
+.left::-webkit-scrollbar-thumb {
+  background: #5b5b80;
+  border-radius: 10px;
+}
+
+.left * {
+  color: inherit;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-left: 32px;
+}
+
+.status_section {
+  display: flex;
+  gap: 60px;
+}
+
+.status_group {
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.status_header {
+  margin-bottom: 16px;
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.status_columns {
+  display: flex;
+  gap: 24px;
+}
+
+.status_column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.status_number {
+  color: #0ff;
+  font-size: 18px;
+  text-shadow: 0 0 12px rgb(0 255 255 / 50%);
+}
+
+.status_number_secondary {
+  color: rgb(255 255 255 / 75%);
+  font-size: 18px;
+}
+
+.summary_card {
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.summary_card p {
+  margin-bottom: 12px;
+  color: rgb(255 255 255 / 75%);
+}
+
+.summary_value {
+  color: #f5f5ff;
+  font-size: 64px;
+  line-height: 1;
+  text-shadow:
+    0 0 10px rgb(120 130 255 / 80%),
+    0 0 30px rgb(120 130 255 / 50%);
 }

@@ -13,6 +13,7 @@ import { Home } from '../../pages/home/home';
 import { IngredientPage, IngredientModal } from '../../pages/ingredient/ingredient';
 import { LoginPage } from '../../pages/login/login';
 import { NotFoundPage } from '../../pages/not-found/not-found';
+import { OrderPage, OrderModal } from '../../pages/order/order';
 import { ProfilePage } from '../../pages/profile/profile';
 import { ProfileInfoPage } from '../../pages/profile/profile-info';
 import { ProfileOrderPage } from '../../pages/profile/profile-order';
@@ -84,14 +85,18 @@ export const App = (): React.JSX.Element => {
         >
           <Route index element={<ProfileInfoPage />} />
           <Route path="orders" element={<ProfileOrderPage />} />
+          <Route path="orders/:id" element={<OrderPage />} />
         </Route>
         <Route path="/feed" element={<FeedPage />} />
+        <Route path="/feed/:id" element={<OrderPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
       {backgroundLocation && (
         <Routes>
           <Route path="/ingredients/:id" element={<IngredientModal />} />
+          <Route path="/feed/:id" element={<OrderModal />} />
+          <Route path="/profile/orders/:id" element={<OrderModal />} />
         </Routes>
       )}
     </div>
