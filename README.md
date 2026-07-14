@@ -1,4 +1,4 @@
-# Стартер на TypeScript для Проект Stellar Burger
+# Stellar Burger
 
 ## Процедура создания коммита с проверками
 
