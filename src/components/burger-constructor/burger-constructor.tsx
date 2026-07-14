@@ -1,7 +1,6 @@
 import {
+  ConstructorElement,
   CurrencyIcon,
-  LockIcon,
-  DeleteIcon,
   DragIcon,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useRef } from 'react';
@@ -75,31 +74,20 @@ const ConstructorItem = ({
         </div>
       )}
 
-      <div
-        className={`
-        ${styles.item_inner}
-        ${type ? (type === 'top-bun' ? styles.top_item_bun : styles.bottom_item_bun) : ''}
-      `}
-      >
-        <div className={styles.item_info}>
-          <img src={item.image} alt={item.name} className={styles.item_image} />
-          <p className="text text_type_main-default">{item.name}</p>
-        </div>
-        <div className={styles.price_row}>
-          <p className="text text_type_digits-default">{item.price}</p>
-          <CurrencyIcon type="primary" />
-        </div>
-        {!blocked && onRemove && (
-          <button type="button" className={styles.delete_button} onClick={onRemove}>
-            <DeleteIcon type="secondary" />
-          </button>
-        )}
-        {blocked && (
-          <div className={styles.locked_tag}>
-            <LockIcon type="secondary" />
-          </div>
-        )}
-      </div>
+      <ConstructorElement
+        type={type === 'top-bun' ? 'top' : type === 'bottom-bun' ? 'bottom' : undefined}
+        isLocked={blocked}
+        text={
+          type === 'top-bun'
+            ? `${item.name} (верх)`
+            : type === 'bottom-bun'
+              ? `${item.name} (низ)`
+              : item.name
+        }
+        price={item.price}
+        thumbnail={item.image}
+        handleClose={onRemove}
+      />
     </li>
   );
 };

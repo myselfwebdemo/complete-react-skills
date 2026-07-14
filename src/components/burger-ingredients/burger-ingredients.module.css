@@ -3,7 +3,6 @@
   flex-direction: column;
   max-width: 600px;
   color: var(--text-primary-color);
-  font-family: 'Jet Brains Mono', serif;
 }
 
 .menu {
