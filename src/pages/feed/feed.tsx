@@ -1,5 +1,5 @@
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import {
   connectOrdersFeed,
@@ -8,14 +8,12 @@ import {
 import { getStatusColumns } from '../../utils/orders';
 import { OrderFeed } from './order-feed';
 
-import type { RootState, AppDispatch } from '../../store';
-
 import styles from './feed.module.css';
 
 export const FeedPage = (): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
-  const ordersFeed = useSelector((state: RootState) => state.ordersFeed);
-  const ingredients = useSelector((state: RootState) => state.ingredients.items);
+  const dispatch = useAppDispatch();
+  const ordersFeed = useAppSelector((state) => state.ordersFeed);
+  const ingredients = useAppSelector((state) => state.ingredients.items);
 
   useEffect(() => {
     dispatch(connectOrdersFeed());

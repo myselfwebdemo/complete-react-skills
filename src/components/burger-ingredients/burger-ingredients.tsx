@@ -1,10 +1,9 @@
+import { useAppSelector } from '@/hooks';
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import IngredientCard from './ingredient-item';
 
-import type { RootState } from '@/store';
 import type React from 'react';
 
 import styles from './burger-ingredients.module.css';
@@ -18,7 +17,7 @@ function BurgerIngredients({
   onSelectIngredient,
   getIngredientCount,
 }: TBurgerIngredientsProps): React.JSX.Element {
-  const ingredients = useSelector((store: RootState) => store.ingredients.items);
+  const ingredients = useAppSelector((store) => store.ingredients.items);
   const [active, setActive] = useState<'bun' | 'sauce' | 'main'>('bun');
 
   const buns = ingredients.filter((i) => i.type === 'bun');

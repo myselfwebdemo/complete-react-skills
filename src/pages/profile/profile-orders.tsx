@@ -1,6 +1,6 @@
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import {
@@ -9,17 +9,16 @@ import {
 } from '../../features/profileOrders/profileOrdersSlice';
 import { calculateOrderCost, getOrderIngredientPreview } from '../../utils/orders';
 
-import type { AppDispatch, RootState } from '../../store';
 import type React from 'react';
 
 import styles from './profile-orders.module.css';
 
 export const ProfileOrdersPage = (): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { orders, error } = useSelector((state: RootState) => state.profileOrders);
-  const ingredients = useSelector((state: RootState) => state.ingredients.items);
+  const { orders, error } = useAppSelector((state) => state.profileOrders);
+  const ingredients = useAppSelector((state) => state.ingredients.items);
 
   useEffect(() => {
     dispatch(connectProfileOrders());

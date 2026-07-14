@@ -9,9 +9,6 @@ type TOrderDetailsProps = {
 export const OrderDetails = ({ orderNumber }: TOrderDetailsProps): React.JSX.Element => (
   <div className={styles.order_container}>
     <p className={`text text_type_digits-large ${styles.order_number}`}>{orderNumber}</p>
-    <p className={`text text_type_main-default ${styles.order_label}`}>
-      идентификатор заказа
-    </p>
     <div className={styles.order_icon_wrap}>
       <CheckMarkIcon type="primary" />
     </div>

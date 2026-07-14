@@ -1,5 +1,6 @@
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import {
@@ -9,7 +10,6 @@ import {
   type TWSOrder,
 } from '../../utils/orders';
 
-import type { RootState } from '../../store';
 import type React from 'react';
 
 import styles from './order-details-page.module.css';
@@ -28,9 +28,26 @@ const formatDate = (dateString: string): string => {
 
 export const OrderDetailsPage = (): React.JSX.Element => {
   const { id } = useParams<{ id: string }>();
-  const ingredients = useSelector((state: RootState) => state.ingredients.items);
-  const feedOrders = useSelector((state: RootState) => state.ordersFeed.orders);
-  const profileOrders = useSelector((state: RootState) => state.profileOrders.orders);
+  const dispatch = useAppDispatch();
+  const ingredients = useAppSelector((state) => state.ingredients.items);
+  const feedOrders = useAppSelector((state) => state.ordersFeed.orders);
+  const profileOrders = useAppSelector((state) => state.profileOrders.orders);
+
+  useEffect(() => {
+    // ensure websocket feeds are connected when opening details directly
+    if (feedOrders.length === 0) {
+      // lazy import to avoid circular deps
+      void import('../../features/ordersFeed/ordersFeedSlice').then((m) => {
+        dispatch(m.connectOrdersFeed());
+      });
+    }
+    if (profileOrders.length === 0) {
+      void import('../../features/profileOrders/profileOrdersSlice').then((m) => {
+        dispatch(m.connectProfileOrders());
+      });
+    }
+    // We don't attempt to manage disconnect here — slices/middleware handle lifecycle elsewhere
+  }, []);
 
   const allOrders: TWSOrder[] = [...feedOrders, ...profileOrders];
   const order = id

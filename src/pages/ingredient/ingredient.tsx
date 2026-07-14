@@ -1,5 +1,5 @@
+import { useAppSelector, useAppDispatch } from '@/hooks';
 import { Preloader } from '@krgaa/react-developer-burger-ui-components';
-import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { IngredientDetails } from '@components/modal/ingredient-details';
@@ -10,7 +10,6 @@ import {
   addIngredient,
 } from '../../features/burgerConstructor/burgerConstructorSlice';
 
-import type { RootState, AppDispatch } from '../../store';
 import type React from 'react';
 
 import styles from './ingredient.module.css';
@@ -18,11 +17,11 @@ import styles from './ingredient.module.css';
 export const IngredientPage = (): React.JSX.Element => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const ingredients = useSelector((s: RootState) => s.ingredients.items);
+  const dispatch = useAppDispatch();
+  const ingredients = useAppSelector((s) => s.ingredients.items);
 
   const ingredient = ingredients.find((item) => item._id === id);
-  const status = useSelector((s: RootState) => s.ingredients.status);
+  const status = useAppSelector((s) => s.ingredients.status);
 
   const handleAddIngredient = (): void => {
     if (!ingredient) return;
@@ -58,9 +57,9 @@ export const IngredientPage = (): React.JSX.Element => {
 export const IngredientModal = (): React.ReactElement | null => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const ingredients = useSelector((s: RootState) => s.ingredients.items);
-  const status = useSelector((s: RootState) => s.ingredients.status);
+  const dispatch = useAppDispatch();
+  const ingredients = useAppSelector((s) => s.ingredients.items);
+  const status = useAppSelector((s) => s.ingredients.status);
 
   const ingredient = ingredients.find((item) => item._id === id);
 
