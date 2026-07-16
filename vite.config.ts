@@ -19,12 +19,13 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
-  base: '/ya-module-react-2/',
+  base: '',
   test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./vitest-setup.ts'],
-    exclude: ['e2e/**'],
+    include: ['src/**/*.test.{ts,tsx}'],
+    exclude: ['e2e/**', 'node_modules/**'],
   },
   server: {
     open: true,
