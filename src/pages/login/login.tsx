@@ -1,24 +1,23 @@
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import {
   Button,
   EmailInput,
   PasswordInput,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { loginUser } from '../../features/auth/authSlice';
 
-import type { RootState, AppDispatch } from '../../store';
 import type React from 'react';
 
 import styles from './login.module.css';
 
 export const LoginPage = (): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const authError = useSelector((state: RootState) => state.auth.error);
+  const authError = useAppSelector((state) => state.auth.error);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

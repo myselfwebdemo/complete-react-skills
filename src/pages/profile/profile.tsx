@@ -1,15 +1,14 @@
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '@/hooks';
 import { NavLink, Outlet } from 'react-router-dom';
 
 import { logoutUser } from '../../features/auth/authSlice';
 
-import type { AppDispatch } from '../../store';
 import type React from 'react';
 
 import styles from './profile.module.css';
 
 export const ProfilePage = (): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const handleLogout = (): void => {
     void dispatch(logoutUser());

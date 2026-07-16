@@ -35,6 +35,12 @@ export function clearTokens(): void {
   localStorage.removeItem(REFRESH_TOKEN_KEY);
 }
 
+export function getRawAccessToken(): string | null {
+  const token = getAccessToken();
+  if (!token) return null;
+  return token.replace(/^Bearer\s+/i, '');
+}
+
 export async function refreshTokenRequest(): Promise<{
   accessToken: string;
   refreshToken: string;

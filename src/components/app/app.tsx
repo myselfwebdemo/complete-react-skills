@@ -1,5 +1,5 @@
+import { useAppDispatch } from '@/hooks';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 import { AppHeader } from '@components/app-header/app-header';
@@ -13,20 +13,20 @@ import { Home } from '../../pages/home/home';
 import { IngredientPage, IngredientModal } from '../../pages/ingredient/ingredient';
 import { LoginPage } from '../../pages/login/login';
 import { NotFoundPage } from '../../pages/not-found/not-found';
+import { OrderPage, OrderModal } from '../../pages/order/order';
 import { ProfilePage } from '../../pages/profile/profile';
 import { ProfileInfoPage } from '../../pages/profile/profile-info';
 import { ProfileOrderPage } from '../../pages/profile/profile-order';
 import { RegisterPage } from '../../pages/register/register';
 import { ResetPasswordPage } from '../../pages/reset-password/reset-password';
 
-import type { AppDispatch } from '../../store';
 import type React from 'react';
 import type { Location } from 'react-router-dom';
 
 import styles from './app.module.css';
 
 export const App = (): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const state = location.state as { backgroundLocation?: Location } | null;
   const backgroundLocation = state?.backgroundLocation;
@@ -84,14 +84,25 @@ export const App = (): React.JSX.Element => {
         >
           <Route index element={<ProfileInfoPage />} />
           <Route path="orders" element={<ProfileOrderPage />} />
+          <Route path="orders/:id" element={<OrderPage />} />
         </Route>
         <Route path="/feed" element={<FeedPage />} />
+        <Route path="/feed/:id" element={<OrderPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
       {backgroundLocation && (
         <Routes>
           <Route path="/ingredients/:id" element={<IngredientModal />} />
+          <Route path="/feed/:id" element={<OrderModal />} />
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <ProtectedRoute>
+                <OrderModal />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       )}
     </div>

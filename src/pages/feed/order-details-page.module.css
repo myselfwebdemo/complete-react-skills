@@ -1,0 +1,62 @@
+.container {
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.order_number {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.status {
+  margin-bottom: 32px;
+  color: #0cc;
+}
+
+.details_card {
+  padding: 32px;
+  background: rgb(15 17 24 / 75%);
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 24px;
+}
+
+.ingredients_list {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.ingredient_row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.ingredient_name {
+  color: #fff;
+}
+
+.ingredient_count {
+  color: rgb(255 255 255 / 80%);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total_price {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}

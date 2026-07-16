@@ -1,20 +1,19 @@
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { Input } from '@components/ui/input';
 
 import { updateUser } from '../../features/auth/authSlice';
 
-import type { RootState, AppDispatch } from '../../store';
 import type React from 'react';
 
 import styles from './profile.module.css';
 
 export const ProfileInfoPage = (): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
-  const user = useSelector((state: RootState) => state.auth.user);
-  const isLoading = useSelector((state: RootState) => state.auth.isLoading);
-  const authError = useSelector((state: RootState) => state.auth.error);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);
+  const isLoading = useAppSelector((state) => state.auth.isLoading);
+  const authError = useAppSelector((state) => state.auth.error);
 
   const [name, setName] = useState(user?.name ?? '');
   const [email, setEmail] = useState(user?.email ?? '');

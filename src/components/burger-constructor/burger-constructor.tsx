@@ -1,3 +1,4 @@
+import { useAppSelector } from '@/hooks';
 import {
   ConstructorElement,
   CurrencyIcon,
@@ -5,9 +6,7 @@ import {
 } from '@krgaa/react-developer-burger-ui-components';
 import { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { useSelector } from 'react-redux';
 
-import type { RootState } from '@/store';
 import type { TIngredient } from '@utils/types';
 import type React from 'react';
 
@@ -100,9 +99,7 @@ export const BurgerConstructor = ({
   canOrder,
   onAddIngredient,
 }: TBurgerConstructorProps): React.JSX.Element => {
-  const ingredients = useSelector(
-    (store: RootState) => store.burgerConstructor.ingredients
-  );
+  const ingredients = useAppSelector((store) => store.burgerConstructor.ingredients);
   const constructorItemsData = ingredients.filter((item) => item.type !== 'bun');
 
   const totalPrice =

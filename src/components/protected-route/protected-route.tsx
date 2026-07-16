@@ -1,7 +1,6 @@
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@/hooks';
 import { Navigate, useLocation } from 'react-router-dom';
 
-import type { RootState } from '../../store';
 import type { ReactNode } from 'react';
 
 type ProtectedRouteProps = {
@@ -9,7 +8,7 @@ type ProtectedRouteProps = {
 };
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps): React.JSX.Element => {
-  const { isAuthenticated, isChecking } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, isChecking } = useAppSelector((state) => state.auth);
   const location = useLocation();
 
   if (isChecking) {
@@ -24,7 +23,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps): React.JSX.Ele
 };
 
 export const GuestRoute = ({ children }: ProtectedRouteProps): React.JSX.Element => {
-  const { isAuthenticated, isChecking } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, isChecking } = useAppSelector((state) => state.auth);
 
   if (isChecking) {
     return <></>;

@@ -1,8 +1,8 @@
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { Preloader } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { BurgerConstructor } from '@components/burger-constructor/burger-constructor';
@@ -19,22 +19,21 @@ import {
 } from '../../features/burgerConstructor/burgerConstructorSlice';
 import { createOrder } from '../../features/order/orderSlice';
 
-import type { RootState, AppDispatch } from '../../store';
 import type React from 'react';
 
 import styles from './home.module.css';
 
 export const Home = (): React.JSX.Element => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const ingredients = useSelector((s: RootState) => s.ingredients.items);
-  const status = useSelector((s: RootState) => s.ingredients.status);
-  const error = useSelector((s: RootState) => s.ingredients.error);
-  const burgerConstructor = useSelector((s: RootState) => s.burgerConstructor);
-  const orderNumber = useSelector((s: RootState) => s.order.number);
-  const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
+  const ingredients = useAppSelector((s) => s.ingredients.items);
+  const status = useAppSelector((s) => s.ingredients.status);
+  const error = useAppSelector((s) => s.ingredients.error);
+  const burgerConstructor = useAppSelector((s) => s.burgerConstructor);
+  const orderNumber = useAppSelector((s) => s.order.number);
+  const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
 
   const [isOrderModalOpen, setOrderModalOpen] = useState(false);
 
