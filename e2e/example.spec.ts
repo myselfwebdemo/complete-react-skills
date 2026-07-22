@@ -1,4 +1,7 @@
-import { expect, test } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+
+import { expect, test, type Page } from '@playwright/test';
 
 async function dragAndDrop(
   page: Parameters<typeof test>[0]['page'],
@@ -11,24 +14,46 @@ async function dragAndDrop(
   await sourceElement.scrollIntoViewIfNeeded().catch(() => undefined);
   await targetElement.scrollIntoViewIfNeeded().catch(() => undefined);
 
-  const sourceBox = await sourceElement.boundingBox();
-  const targetBox = await targetElement.boundingBox();
+  await sourceElement.dragTo(targetElement)
+}
 
-  if (!sourceBox || !targetBox) {
-    throw new Error('Unable to find drag source or target');
-  }
+async function mockRequestsFromHar(page: Page) {
+  const harPath = fileURLToPath(new URL('./fixtures/burger-flow.har', import.meta.url));
+  const harContent = await readFile(harPath, 'utf8');
+  const har = JSON.parse(harContent) as {
+    log: {
+      entries: Array<{
+        request: { method: string; url: string };
+        response: {
+          status: number;
+          content: { mimeType?: string; text?: string };
+        };
+      }>;
+    };
+  };
 
-  await page.mouse.move(
-    sourceBox.x + sourceBox.width / 2,
-    sourceBox.y + sourceBox.height / 2
-  );
-  await page.mouse.down();
-  await page.mouse.move(
-    targetBox.x + targetBox.width / 2,
-    targetBox.y + targetBox.height / 2,
-    { steps: 10 }
-  );
-  await page.mouse.up();
+  await page.route('**/*', async (route) => {
+    const request = route.request();
+    const requestMethod = request.method().toUpperCase();
+    const requestUrl = request.url();
+
+    const matchingEntry = har.log.entries.find(
+      (entry) =>
+        entry.request.method.toUpperCase() === requestMethod &&
+        entry.request.url === requestUrl
+    );
+
+    if (!matchingEntry) {
+      await route.continue();
+      return;
+    }
+
+    await route.fulfill({
+      status: matchingEntry.response.status,
+      contentType: matchingEntry.response.content.mimeType ?? 'application/json',
+      body: matchingEntry.response.content.text ?? '',
+    });
+  });
 }
 
 test('creates an order by assembling a burger and opening the order modal', async ({
@@ -39,68 +64,21 @@ test('creates an order by assembling a burger and opening the order modal', asyn
     window.localStorage.setItem('refreshToken', 'test-refresh-token');
   });
 
-  const bun = {
-    _id: 'bun-1',
-    name: 'Краторная булка',
-    type: 'bun',
-    proteins: 10,
-    fat: 20,
-    carbohydrates: 30,
-    calories: 40,
-    price: 100,
-    image: 'bun.png',
-    image_large: 'bun-large.png',
-    image_mobile: 'bun-mobile.png',
-    __v: 0,
-  };
+  await mockRequestsFromHar(page);
 
-  const sauce = {
-    _id: 'sauce-1',
-    name: 'Соус',
-    type: 'sauce',
-    proteins: 1,
-    fat: 2,
-    carbohydrates: 3,
-    calories: 4,
-    price: 20,
-    image: 'sauce.png',
-    image_large: 'sauce-large.png',
-    image_mobile: 'sauce-mobile.png',
-    __v: 0,
-  };
-
-  await page.route('**/api/ingredients', async (route) => {
-    await route.fulfill({
-      json: {
-        success: true,
-        data: [bun, sauce],
-      },
-    });
-  });
-
-  await page.route('**/api/auth/user', async (route) => {
-    await route.fulfill({
-      json: {
-        success: true,
-        user: { name: 'Test User', email: 'test@example.com' },
-      },
-    });
-  });
-
-  await page.route('**/api/orders', async (route) => {
-    await route.fulfill({
-      json: {
-        success: true,
-        name: 'Тестовый бургер',
-        order: { number: 4242 },
-      },
-    });
-  });
+  page.on('console', (msg) => {console.log(msg.text())});
 
   await page.goto('/');
+  await page.waitForLoadState('networkidle');
+
+  await expect(
+    page.getByTestId('bun-dropzone-top')
+  ).toBeVisible();
 
   await expect(page.getByRole('heading', { name: 'Соберите бургер' })).toBeVisible();
   await expect(page.getByText('Краторная булка', { exact: true })).toBeVisible();
+
+  await page.waitForTimeout(1000)
 
   await dragAndDrop(
     page,
@@ -113,14 +91,17 @@ test('creates an order by assembling a burger and opening the order modal', asyn
     '[data-testid="constructor-ingredients-dropzone"]'
   );
 
-  await expect(page.getByText(/Краторная булка.*\(верх\)/)).toBeVisible();
-  await expect(
-    page.getByTestId('constructor-ingredients-dropzone').getByText(/Соус|соус/i)
-  ).toBeVisible();
+  await expect(page.getByTestId('bun-dropzone-top')).toContainText('Краторная булка');
+  await expect(page.getByTestId('constructor-ingredients-dropzone').getByText(/Соус|соус/i)).toBeVisible();
 
-  await page.getByRole('button', { name: 'Оформить заказ' }).click();
+  const orderButton = page.getByRole('button', { name: 'Оформить заказ' });
+  await expect(orderButton).toBeEnabled();
+  await orderButton.click();
 
   await expect(page.getByRole('dialog')).toBeVisible();
   await expect(page.getByText('Ваш заказ начали готовить')).toBeVisible();
   await expect(page.getByText('#4242')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Закрыть' }).click();
+  await expect(page.getByRole('dialog')).not.toBeVisible();
 });

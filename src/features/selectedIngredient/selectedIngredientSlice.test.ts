@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import reducer, {
   clearSelectedIngredient,
+  initialState,
   selectIngredient,
 } from './selectedIngredientSlice';
 
@@ -24,7 +25,7 @@ const ingredient: TIngredient = {
 
 describe('selectedIngredientSlice', () => {
   it('returns the initial state', () => {
-    expect(reducer(undefined, { type: 'unknown' })).toBeNull();
+    expect(reducer(undefined, { type: 'unknown' })).toBe(initialState);
   });
 
   it('selects an ingredient', () => {

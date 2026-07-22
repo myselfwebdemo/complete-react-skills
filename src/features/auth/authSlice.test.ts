@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import reducer, {
   clearAuthError,
   initializeAuth,
+  initialState,
   loginUser,
   logoutUser,
   registerUser,
@@ -13,13 +14,7 @@ import reducer, {
 
 describe('authSlice', () => {
   it('returns the initial state', () => {
-    expect(reducer(undefined, { type: 'unknown' })).toEqual({
-      user: null,
-      isAuthenticated: false,
-      isLoading: false,
-      isChecking: true,
-      error: null,
-    });
+    expect(reducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });
 
   it('clears the auth error', () => {

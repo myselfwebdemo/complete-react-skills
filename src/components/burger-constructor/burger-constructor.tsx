@@ -113,6 +113,7 @@ export const BurgerConstructor = ({
   const [, topBunDrop] = useDrop({
     accept: 'ingredient',
     drop(item: { ingredientId: string; type: string }) {
+      console.log('React DnD drop', item);
       if (item.type === 'bun') {
         onAddIngredient(item.ingredientId);
       }

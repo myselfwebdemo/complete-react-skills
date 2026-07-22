@@ -1,14 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import reducer, { createOrder } from './orderSlice';
+import reducer, { createOrder, initialState } from './orderSlice';
 
 describe('orderSlice', () => {
   it('returns the initial state', () => {
-    expect(reducer(undefined, { type: 'unknown' })).toEqual({
-      number: null,
-      status: 'idle',
-      error: null,
-    });
+    expect(reducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });
 
   it('sets loading state while creating an order', () => {

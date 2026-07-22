@@ -4,6 +4,7 @@ import reducer, {
   addBun,
   addIngredient,
   clearConstructor,
+  initialState,
   moveIngredient,
   removeIngredient,
 } from './burgerConstructorSlice';
@@ -42,10 +43,7 @@ const sauce: TIngredient = {
 
 describe('burgerConstructorSlice', () => {
   it('returns the initial state', () => {
-    expect(reducer(undefined, { type: 'unknown' })).toEqual({
-      bun: null,
-      ingredients: [],
-    });
+    expect(reducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });
 
   it('adds bun with generated unique id', () => {

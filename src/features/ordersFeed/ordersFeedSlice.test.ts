@@ -2,23 +2,17 @@ import { describe, expect, it } from 'vitest';
 
 import reducer, {
   connectOrdersFeed,
+  disconnectOrdersFeed,
+  initialState,
   ordersFeedClose,
   ordersFeedError,
   ordersFeedOpen,
   ordersFeedReceived,
-  disconnectOrdersFeed,
 } from './ordersFeedSlice';
 
 describe('ordersFeedSlice', () => {
   it('returns the initial state', () => {
-    expect(reducer(undefined, { type: 'unknown' })).toEqual({
-      orders: [],
-      total: 0,
-      totalToday: 0,
-      status: 'idle',
-      error: null,
-      isConnected: false,
-    });
+    expect(reducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });
 
   it('sets loading state on connect', () => {

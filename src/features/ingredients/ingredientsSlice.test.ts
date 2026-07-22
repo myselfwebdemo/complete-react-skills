@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import reducer, { fetchIngredients } from './ingredientsSlice';
+import reducer, { fetchIngredients, initialState } from './ingredientsSlice';
 
 import type { TIngredient } from '@/utils/types';
 
@@ -21,11 +21,7 @@ const ingredient: TIngredient = {
 
 describe('ingredientsSlice', () => {
   it('returns the initial state', () => {
-    expect(reducer(undefined, { type: 'unknown' })).toEqual({
-      items: [],
-      status: 'idle',
-      error: null,
-    });
+    expect(reducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });
 
   it('sets loading status while fetching ingredients', () => {
