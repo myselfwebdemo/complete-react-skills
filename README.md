@@ -1,5 +1,7 @@
 # Stellar Burger
 
+Project is deployed on: https://ymr3.netlify.app
+
 ## Процедура создания коммита с проверками
 
 При создании коммита автоматически запускаются проверка линтерами `stylelint`, `eslint` и форматирование `prettier`.

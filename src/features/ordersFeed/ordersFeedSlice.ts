@@ -11,7 +11,7 @@ type OrdersFeedState = {
   isConnected: boolean;
 };
 
-const initialState: OrdersFeedState = {
+export const initialState: OrdersFeedState = {
   orders: [],
   total: 0,
   totalToday: 0,

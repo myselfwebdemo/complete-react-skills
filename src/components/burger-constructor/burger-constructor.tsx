@@ -113,6 +113,7 @@ export const BurgerConstructor = ({
   const [, topBunDrop] = useDrop({
     accept: 'ingredient',
     drop(item: { ingredientId: string; type: string }) {
+      console.log('React DnD drop', item);
       if (item.type === 'bun') {
         onAddIngredient(item.ingredientId);
       }
@@ -142,8 +143,8 @@ export const BurgerConstructor = ({
   ingredientsDrop(ingredientsDropRef);
 
   return (
-    <section className={styles.burger_constructor}>
-      <div ref={topBunDropRef}>
+    <section className={styles.burger_constructor} data-testid="burger-constructor">
+      <div ref={topBunDropRef} data-testid="bun-dropzone-top">
         {selectedBun ? (
           <ConstructorItem item={selectedBun} type="top-bun" blocked />
         ) : (
@@ -154,7 +155,11 @@ export const BurgerConstructor = ({
       </div>
 
       <div className={styles.scrollable_wrapper}>
-        <ul ref={ingredientsDropRef} className={styles.constructor_list}>
+        <ul
+          ref={ingredientsDropRef}
+          className={styles.constructor_list}
+          data-testid="constructor-ingredients-dropzone"
+        >
           {constructorItemsData.length > 0 ? (
             constructorItemsData.map((item, index) => (
               <ConstructorItem
@@ -171,7 +176,7 @@ export const BurgerConstructor = ({
         </ul>
       </div>
 
-      <div ref={bottomBunDropRef}>
+      <div ref={bottomBunDropRef} data-testid="bun-dropzone-bottom">
         {selectedBun ? (
           <ConstructorItem item={selectedBun} type="bottom-bun" blocked />
         ) : (

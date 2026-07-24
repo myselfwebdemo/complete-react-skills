@@ -11,7 +11,7 @@ type ProfileOrdersState = {
   isConnected: boolean;
 };
 
-const initialState: ProfileOrdersState = {
+export const initialState: ProfileOrdersState = {
   orders: [],
   total: 0,
   totalToday: 0,
